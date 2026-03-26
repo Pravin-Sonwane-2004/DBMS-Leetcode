@@ -243,3 +243,7 @@ where (id % 2) != 0  && c1.description != "boring" order by id DESC;
 # Write your MySQL query statement below
 select * from Cinema c1
 where (id % 2) != 0  && c1.description != "boring" order by rating DESC;
+
+-- leetcode 596 -- 
+# Write your MySQL query statement below
+select class from Courses group by class having count(student) >=5
