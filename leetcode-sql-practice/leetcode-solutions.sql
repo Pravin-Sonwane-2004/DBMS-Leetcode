@@ -247,3 +247,52 @@ where (id % 2) != 0  && c1.description != "boring" order by rating DESC;
 -- leetcode 596 -- 
 # Write your MySQL query statement below
 select class from Courses group by class having count(student) >=5
+
+
+
+mysql> CREATE TABLE employees (
+    ->     id INT,
+    ->     name VARCHAR(50),
+    ->     department VARCHAR(50),
+    ->     salary INT
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO employees VALUES
+    -> (1, 'Amit', 'IT', 60000),
+    -> (2, 'Rahul', 'IT', 45000),
+    -> (3, 'Neha', 'IT', 70000),
+    -> (4, 'Priya', 'HR', 50000),
+    -> (5, 'Ankit', 'HR', 55000),
+    -> (6, 'Simran', 'HR', 65000),
+    -> (7, 'Karan', 'Finance', 40000),
+    -> (8, 'Riya', 'Finance', 30000),
+    -> (9, 'Arjun', 'Finance', 45000),
+    -> (10, 'Sneha', 'Finance', 80000);
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> describe employees
+    -> ;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | YES  |     | NULL    |       |
+| name       | varchar(50) | YES  |     | NULL    |       |
+| department | varchar(50) | YES  |     | NULL    |       |
+| salary     | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select department, count(*) from employees where salary > 40000  group by department having salary (*) > 2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*) > 2' at line 1
+mysql> select department, count(*) from employees where salary > 40000  group by department having count(*) > 2;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| IT         |        3 |
+| HR         |        3 |
++------------+----------+
+2 rows in set (0.00 sec)
+
+mysql>
