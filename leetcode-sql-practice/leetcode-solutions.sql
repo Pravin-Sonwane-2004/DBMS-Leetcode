@@ -296,3 +296,11 @@ mysql> select department, count(*) from employees where salary > 40000  group by
 2 rows in set (0.00 sec)
 
 mysql>
+
+
+leetcode 577
+
+# Write your MySQL query statement below
+select e.name, b.bonus from Employee e 
+left join Bonus b on e.empId  = b.empId 
+where b.bonus < 1000 || b.bonus is null
