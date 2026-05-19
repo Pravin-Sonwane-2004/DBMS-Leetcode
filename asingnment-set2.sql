@@ -218,3 +218,74 @@ mysql> SELECT
 mysql>
 
 -- this was quite frrestrating but i did managed to get through this
+
+-------------------------------------------------------------------------
+
+5 rows in set (0.01 sec)
+
+mysql> select * from Products;
++------------+--------------+-------------+-------+
+| product_id | product_name | category    | price |
++------------+--------------+-------------+-------+
+|          1 | Laptop       | Electronics | 55000 |
+|          2 | Mouse        | Electronics |   700 |
+|          3 | Keyboard     | Electronics |  1500 |
+|          4 | Chair        | Furniture   |  3500 |
+|          5 | Table        | Furniture   |  7000 |
+|          6 | Notebook     | Stationery  |    80 |
++------------+--------------+-------------+-------+
+6 rows in set (0.01 sec)
+
+mysql> select * from sales;
++---------+------------+----------+------------+
+| sale_id | product_id | quantity | sale_date  |
++---------+------------+----------+------------+
+|     201 |          1 |        2 | 2026-02-01 |
+|     202 |          2 |       10 | 2026-02-02 |
+|     203 |          3 |        5 | 2026-02-03 |
+|     204 |          4 |        3 | 2026-02-05 |
+|     205 |          5 |        1 | 2026-02-06 |
+|     206 |          2 |        4 | 2026-02-07 |
+|     207 |          6 |       20 | 2026-02-08 |
++---------+------------+----------+------------+
+7 rows in set (0.00 sec)
+
+Q13. Find total revenue per product.
+Expected columns:
+
+product_name | total_revenue
+select p.product_name, s.price
+
+SELECT 
+    p.product_name, 
+    SUM(s.quantity * p.price) AS total_revenue
+FROM 
+    Products p
+JOIN 
+    Sales s ON p.product_id = s.product_id
+GROUP BY 
+    p.product_name;
+
+
+mysql> SELECT
+    ->     p.product_name,
+    ->     SUM(s.quantity * p.price) AS total_revenue
+    -> FROM
+    ->     Products p
+    -> JOIN
+    ->     Sales s ON p.product_id = s.product_id
+    -> GROUP BY
+    ->     p.product_name;
++--------------+---------------+
+| product_name | total_revenue |
++--------------+---------------+
+| Laptop       |        110000 |
+| Mouse        |          9800 |
+| Keyboard     |          7500 |
+| Chair        |         10500 |
+| Table        |          7000 |
+| Notebook     |          1600 |
++--------------+---------------+
+6 rows in set (0.00 sec)
+
+-- this was easy but i didnt understood and asked to google 
