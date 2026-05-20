@@ -363,3 +363,22 @@ ORDER BY
         WHEN 'Average Salary' THEN 0
     END;
 
+----------------------------------------
+
+leetcode 1251 
+
+# Write your MySQL query statement below
+select 
+distinct 
+p.product_id,
+IFNULL(ROUND(SUM(u.units * p.price) / SUM(u.units), 2), 0) AS average_price
+-- meaning of the IFNULL function is special type of function is used for to know that it is 
+-- null or not and it requires 2 parameters and 
+-- and ROUND is used for to keep 2 decimal places 
+-- im also experiencing some of like them how does it work and lot more
+from Prices p 
+left join UnitsSold u
+ON p.product_id = u.product_id
+AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;
+
