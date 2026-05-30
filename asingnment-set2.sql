@@ -289,3 +289,165 @@ mysql> SELECT
 6 rows in set (0.00 sec)
 
 -- this was easy but i didnt understood and asked to google 
+
+
+------------------------------------------------------------------------
+Q14. Find total revenue per category.
+Expected columns:
+category | total_revenue
+
+
+mysql> use sql_practice
+Database changed
+mysql> select * from Sales;
++---------+------------+----------+------------+
+| sale_id | product_id | quantity | sale_date  |
++---------+------------+----------+------------+
+|     201 |          1 |        2 | 2026-02-01 |
+|     202 |          2 |       10 | 2026-02-02 |
+|     203 |          3 |        5 | 2026-02-03 |
+|     204 |          4 |        3 | 2026-02-05 |
+|     205 |          5 |        1 | 2026-02-06 |
+|     206 |          2 |        4 | 2026-02-07 |
+|     207 |          6 |       20 | 2026-02-08 |
++---------+------------+----------+------------+
+7 rows in set (0.02 sec)
+
+mysql> select * from Products;
++------------+--------------+-------------+-------+
+| product_id | product_name | category    | price |
++------------+--------------+-------------+-------+
+|          1 | Laptop       | Electronics | 55000 |
+|          2 | Mouse        | Electronics |   700 |
+|          3 | Keyboard     | Electronics |  1500 |
+|          4 | Chair        | Furniture   |  3500 |
+|          5 | Table        | Furniture   |  7000 |
+|          6 | Notebook     | Stationery  |    80 |
++------------+--------------+-------------+-------+
+6 rows in set (0.01 sec)
+
+mysql> select category, sum(price) as total_revenue from Products group by category;
++-------------+---------------+
+| category    | total_revenue |
++-------------+---------------+
+| Electronics |         57200 |
+| Furniture   |         10500 |
+| Stationery  |            80 |
++-------------+---------------+
+3 rows in set (0.01 sec)
+
+mysql>
+-----------------------------------------------------------------------
+
+Q15. Find best-selling product by quantity.
+Use:
+SUM(quantity)
+ORDER BY SUM(quantity) DESC
+LIMIT 1
+
+
+SELECT p.category, SUM(s.quantity) AS total_quantity
+FROM Products p
+JOIN Sales s ON p.product_id = s.product_id
+GROUP BY p.category
+ORDER BY total_quantity DESC
+LIMIT 1;
+
+
++-------------+----------------+
+| category    | total_quantity |
++-------------+----------------+
+| Electronics |             21 |
++-------------+----------------+
+1 row in set (0.00 sec)
+
+
+--------------------------------------------------------------------
+
+Q16. Find products that were never sold.
+Hint:
+LEFT JOIN Sales
+
+
+SELECT p.product_id, p.product_name, p.category
+FROM Products p
+LEFT JOIN Sales s ON p.product_id = s.product_id
+WHERE s.sale_id IS NULL;
+
+
+
+
+------------------------------------------------------------------------------
+
+Q17. Show products with price greater than average price.
+Hint:
+WHERE price > (SELECT AVG(price) FROM Products)
+
+
+SELECT product_id, product_name, category, price
+FROM Products
+WHERE price > (SELECT AVG(price) FROM Products);
+
+
+>
+mysql> SELECT product_id, product_name, category, price
+    -> FROM Products
+    -> WHERE price > (SELECT AVG(price) FROM Products);
++------------+--------------+-------------+-------+
+| product_id | product_name | category    | price |
++------------+--------------+-------------+-------+
+|          1 | Laptop       | Electronics | 55000 |
++------------+--------------+-------------+-------+
+1 row in set (0.00 sec)
+
+mysql>
+---------------------------------------------------------------------------
+
+
+Q18. Categorize products by price.
+Rules:
+Price
+                      Category
+>= 10000
+                      Expensive
+>= 1000
+                      Affordable
+< 1000
+                            Cheap
+
+
+
+
+SELECT 
+    product_name, 
+    price,
+    CASE 
+        WHEN price >= 10000 THEN 'Expensive'
+        WHEN price >= 1000 THEN 'Affordable'
+        ELSE 'Cheap'
+    END AS price_category
+FROM Products;
+
+
+
+mysql> SELECT
+    ->     product_name,
+    ->     price,
+    ->     CASE
+    ->         WHEN price >= 10000 THEN 'Expensive'
+    ->         WHEN price >= 1000 THEN 'Affordable'
+    ->         ELSE 'Cheap'
+    ->     END AS price_category
+    -> FROM Products;
++--------------+-------+----------------+
+| product_name | price | price_category |
++--------------+-------+----------------+
+| Laptop       | 55000 | Expensive      |
+| Mouse        |   700 | Cheap          |
+| Keyboard     |  1500 | Affordable     |
+| Chair        |  3500 | Affordable     |
+| Table        |  7000 | Affordable     |
+| Notebook     |    80 | Cheap          |
++--------------+-------+----------------+
+6 rows in set (0.00 sec)
+
