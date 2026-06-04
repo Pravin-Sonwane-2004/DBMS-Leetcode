@@ -154,7 +154,122 @@ JOIN Enrollments e
 JOIN Courses c
     ON e.course_id = c.course_id;
 
+-----------------------------------------------------
 
 
 
+Q20. Count how many courses each student enrolled in.
+Expected columns:
+student_name | total_courses
 
+    select s.name,COUNT(e.course_id) AS total_courses from students  left join enrollments on ON s.student_id = e.student_id
+    group by s.name;
+
++------------+-------+---------------+
+| student_id | name  | total_courses |
++------------+-------+---------------+
+|          1 | Amit  |             2 |
+|          2 | Priya |             2 |
+|          3 | Rahul |             1 |
+|          4 | Sneha |             1 |
+|          5 | Karan |             0 |
++------------+-------+---------------+
+------------------------------------------------------
+
+Q21. Find students who enrolled in more than one course.
+Use:
+GROUP BY
+HAVING COUNT(*) > 1
+
+SELECT student_id, 
+       COUNT(*) AS total_courses
+FROM Enrollments
+GROUP BY student_id
+HAVING COUNT(*) > 1;
++------------+---------------+
+| student_id | total_courses |
++------------+---------------+
+|          1 |             2 |
+|          2 |             2 |
++------------+---------------+
+
+------------------------------------------------------
+
+Q22. Find courses with no students enrolled.
+Hint:
+LEFT JOIN
+WHERE enroll_id IS NULL
+
+//but there is no data is there 
+
+SELECT c.course_id,
+       c.course_name
+FROM Courses c
+LEFT JOIN Enrollments e
+ON c.course_id = e.course_id
+WHERE e.course_id IS NULL;
+
+----------------------------------------------------
+
+Q23. Find total fees paid by each student.
+Expected columns:
+student_name | total_fees
+
+
+select s.name , 
+sum(c.fees) as Total_Fees 
+from 
+students s left join 
+enrollments e 
+on 
+s.student_id = e.student_id
+left join 
+courses c 
+on
+c.course_id = e.course_id
+group by s.name;
+
+
++-------+------------+
+| name  | Total_Fees |
++-------+------------+
+| Amit  |      17000 |
+| Priya |      19000 |
+| Rahul |       9000 |
+| Sneha |      12000 |
+| Karan |       NULL |
++-------+------------+
+5 rows in set (0.00 sec)
+
+
+now only show the students which fees is not null 
+
+    select s.name , 
+    sum(c.fees) as Total_Fees 
+    from 
+    students s left join 
+    enrollments e 
+    on 
+    s.student_id = e.student_id
+    left join 
+    courses c 
+    on
+    c.course_id = e.course_id
+    group by s.name having sum(c.fees) is not null;
+
++-------+------------+
+| name  | Total_Fees |
++-------+------------+
+| Amit  |      17000 |
+| Priya |      19000 |
+| Rahul |       9000 |
+| Sneha |      12000 |
++-------+------------+
+
+
+----------------------------------------------------
+
+Q24. Find the most popular course.
+Based on number of enrollments.
+
+select c.courses as courses_name count (*)
