@@ -272,4 +272,65 @@ now only show the students which fees is not null
 Q24. Find the most popular course.
 Based on number of enrollments.
 
-select c.courses as courses_name count (*)
+SELECT c.course_id,
+       c.course_name,
+       COUNT(*) AS total_enrollments
+FROM courses c
+JOIN enrollments e
+ON c.course_id = e.course_id
+GROUP BY c.course_id, c.course_name
+ORDER BY total_enrollments DESC
+LIMIT 1;
+
++-----------+-------------+-------------------+
+| course_id | course_name | total_enrollments |
++-----------+-------------+-------------------+
+|       101 | Java        |                 2 |
++-----------+-------------+-------------------+
+1 row in set (0.00 sec)
+
+
+-------------------------------------------
+
+Q25. Show students from Pune who enrolled in Java.
+You need:
+JOIN + WHERE
+
+SELECT s.name
+FROM students s
+JOIN enrollments e
+ON s.student_id = e.student_id
+JOIN courses c
+ON c.course_id = e.course_id
+WHERE s.city = 'Pune'
+  AND c.course_name = 'Java';
++------+
+| name |
++------+
+| Amit |
++------+
+--------------------------------------------------
+
+
+Q26. Find students who did not enroll in any course.
+Use:
+LEFT JOIN
+
+alright so there is not any students which not enrolled to any course;
+
+tho ill perform
+
+
+SELECT s.student_id,
+       s.name
+FROM students s
+LEFT JOIN enrollments e
+ON s.student_id = e.student_id
+WHERE e.student_id IS NULL;
+
+
+ans is emppyt set
+
+==================================================
+
+with this this assignment is over
